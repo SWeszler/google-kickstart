@@ -1,0 +1,55 @@
+FAST_IO = 1
+if FAST_IO:
+    import io, sys, atexit
+    rr = iter(sys.stdin.read().splitlines()).next
+    sys.stdout = _OUTPUT_BUFFER = io.BytesIO()
+
+    @atexit.register
+    def write():
+        sys.__stdout__.write(_OUTPUT_BUFFER.getvalue())
+else:
+    rr = raw_input
+rri = lambda: int(rr())
+rrm = lambda: map(int, rr().split())
+rrmm = lambda n: [rrm() for _ in xrange(n)]
+
+####
+MOD = 10**9 + 7
+YES, NO, IMP = "YES", "NO", "IMPOSSIBLE"
+from collections import defaultdict as ddic
+
+
+def solve(N, W, A):
+    # N wheels 1..W
+    for i in xrange(N):
+        A[i] -= 1
+    A.sort()
+    for i in xrange(N):
+        A.append(W + A[i])
+
+    P = [0]
+    for x in A:
+        P.append(P[-1] + x)
+    # print("P", P)
+    ans = N * W
+    for i in range(N):
+        j = i + N - 1
+        # consider i..j
+        m = i + j >> 1
+        mid = A[m]
+        nleft = m - i + 1
+        nright = j - m
+        # print("!", i, m, j, ';', nleft, nright, mid)
+        alpha = mid * nleft - (P[m + 1] - P[i])
+        beta = P[j + 1] - P[m + 1] - nright * mid
+        # print('ab', alpha, beta)
+        cand = alpha + beta
+        ans = min(ans, cand)
+    return ans
+
+
+for tc in xrange(1, 1 + rri()):
+    W, N = rrm()
+    A = rrm()
+    ans = solve(W, N, A)
+    print "Case #{}: {}".format(tc, ans)

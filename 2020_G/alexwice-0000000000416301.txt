@@ -1,0 +1,42 @@
+FAST_IO = 1
+if FAST_IO:
+    import io, sys, atexit
+    rr = iter(sys.stdin.read().splitlines()).next
+    sys.stdout = _OUTPUT_BUFFER = io.BytesIO()
+
+    @atexit.register
+    def write():
+        sys.__stdout__.write(_OUTPUT_BUFFER.getvalue())
+else:
+    rr = raw_input
+rri = lambda: int(rr())
+rrm = lambda: map(int, rr().split())
+rrmm = lambda n: [rrm() for _ in xrange(n)]
+
+####
+MOD = 10**9 + 7
+YES, NO, IMP = "YES", "NO", "IMPOSSIBLE"
+from collections import defaultdict as ddic
+
+
+def solve(S):
+    N = len(S)
+    prefix = [0] * N
+    count = 0
+    for i in range(3, N):
+        if S[i - 3] == 'K' == S[i] and S[i - 2] == 'I' and S[i - 1] == 'C':
+            count += 1
+        prefix[i] = count
+
+    ans = 0
+    for i in range(4, N):
+        if S[i - 4] == 'S' and S[i - 3] == 'T' == S[i] and S[
+                i - 2] == 'A' and S[i - 1] == 'R':
+            ans += prefix[i - 4]
+    return ans
+
+
+for tc in xrange(1, 1 + rri()):
+    S = rr()
+    ans = solve(S)
+    print "Case #{}: {}".format(tc, ans)

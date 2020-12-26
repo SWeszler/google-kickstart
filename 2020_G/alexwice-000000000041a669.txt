@@ -1,0 +1,62 @@
+FAST_IO = 1
+if FAST_IO:
+    import io, sys, atexit
+    rr = iter(sys.stdin.read().splitlines()).next
+    sys.stdout = _OUTPUT_BUFFER = io.BytesIO()
+
+    @atexit.register
+    def write():
+        sys.__stdout__.write(_OUTPUT_BUFFER.getvalue())
+else:
+    rr = raw_input
+rri = lambda: int(rr())
+rrm = lambda: map(int, rr().split())
+rrmm = lambda n: [rrm() for _ in xrange(n)]
+
+####
+MOD = 10**9 + 7
+YES, NO, IMP = "YES", "NO", "IMPOSSIBLE"
+from collections import defaultdict as ddic
+
+import sys
+sys.setrecursionlimit(200000)
+
+
+def memo(f):
+    class memodict(dict):
+        def __init__(self, f):
+            self.f = f
+
+        def __call__(self, *args):
+            return self[args]
+
+        def __missing__(self, key):
+            ret = self[key] = self.f(*key)
+            return ret
+
+    return memodict(f)
+
+
+def solve(N, A):
+    P = [0]
+    for x in A:
+        P.append(P[-1] + x)
+
+    @memo
+    def dp(i, j):
+        if i == j: return 0
+        base = P[j + 1] - P[i]
+        ans = 0
+        for k in xrange(i, j):
+            ans += dp(i, k) + dp(k + 1, j)
+        ans /= float(j - i)
+        return ans + base
+
+    return dp(0, N - 1)
+
+
+for tc in xrange(1, 1 + rri()):
+    N = rri()
+    A = rrm()
+    ans = solve(N, A)
+    print "Case #{}: {}".format(tc, ans)
