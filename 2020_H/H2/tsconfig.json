@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "alwaysStrict": true,
+    },
+    "files": [
+        "h2.ts",
+    ]
+}

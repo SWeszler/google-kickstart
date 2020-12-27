@@ -45,4 +45,31 @@ In Sample Case #2, the numbers in the range are {120, 121, 122, 123, 124, 125} o
 
 In Sample Case #3, the numbers in the range are {779, 780, 781, 782, 783} out of which {781, 783} are boring, hence the answer is 2.
 
+## Testing  
 
+### Python 3.6
+```
+python3.6 h2.py < input.txt
+```
+
+### PyPy2
+```
+pypy h2pp2.py < input.txt
+```
+
+### Javascript
+```
+node h2.js < input.txt
+```
+
+### TypeScript
+
+```
+tsc
+node h2.js < input.txt
+```
+
+### TypeScript Node
+```
+ts-node h2.ts < input.txt
+```
