@@ -16,7 +16,7 @@ def solution_bf(L, R):
     return count
 
 
-def solution_fast(L, R):
+def solution_faster(L, R):
     count = 0
     l = [int(d) for d in str(L)]
 
@@ -65,65 +65,90 @@ def solution_fast(L, R):
             c = a[i]
         
         count += 1
-        print(L)
         L = int(''.join([str(d) for d in a]))
 
     return count
 
 
-def addition(L, R):
-    """
-    Adds two to an integer.
-    """
+def solution_fastest(L, R):
+    intervals = []
+    l = 1
+    last = 0
+    rsum = 0
+    lsum = 0
+    
+    while 10**l - 10**(l-1) < R - last:
+        intervals.append([last + 1, last + 10**l - 10**(l-1), l])
+        last += 10**l - 10**(l-1)
+        l += 1
 
-    a = 999
-    a = [int(d) for d in str(a)]
-    i = len(a) - 1
-    a[i] += 2
-    c = a[i]
-
-    while c >= 10:
-        a[i] = c % 10
-        i -= 1
-        if i < 0:
-            a = [0] + a
-            i = 0
-        a[i] += 1
-        c = a[i]
-
-    print(a)
-
-
-def find_boring(L, R):
-    N = 779
-    A = [int(d) for d in str(N)]
-
-    def is_even(n):
-        return not n % 2
-
-    i = len(A) - 1
-    while i >= 0:
-        if is_even(i + 1) != is_even(A[i]):
-            A[i] += 1
-            A[i - 1] += A[i] // 10
-            A[i] = A[i] % 10
-            A = A[:i + 1] + [0] * (len(A) - 1 - i)
-            i = len(A) - 1
+    while last < R:
+        if R - last < 10:
+            intervals.append([last + 1, R, 0])
+            break
+        elif 10**(l-1) < R - last:
+            intervals.append([last + 1, last + 10**(l-1), l-1])
+            last += 10**(l-1)
         else:
-            A[i - 1] += A[i] // 10
-            A[i] = A[i] % 10
-            i -= 1
+            l -= 1
 
-        if A[0] >= 10:
-            A[0] = A[i] % 10
-            A = [A[i] // 10] + A
-            i += 1
+    for s, e, l in intervals:
+        if l != 0:
+            e = s
+        for n in range(s, e + 1):
+            i = 1
+            boring = True
+            for d in str(n):
+                if i % 2 != int(d) % 2:
+                    boring = False
+                i += 1
+                if i > len(str(n)) - l:
+                    break
+            if boring and l == 0:
+                rsum += 1
 
-    print(A)
+        if boring and l != 0:
+            rsum += 5**l
 
+    l = 1
+    last = 0
+    intervals = []
+    while 10**l - 10**(l-1) < L - last:
+        intervals.append([last + 1, last + 10**l - 10**(l-1), l])
+        last += 10**l - 10**(l-1)
+        l += 1
 
+    while last < L - 1:
+        if L - last < 10:
+            intervals.append([last + 1, L - 1, 0])
+            break
+        elif 10**(l-1) < L - 1 - last:
+            intervals.append([last + 1, last + 10**(l-1), l-1])
+            last += 10**(l-1)
+        else:
+            l -= 1
 
-solution = solution_fast
+    for s, e, l in intervals:
+        if l != 0:
+            e = s
+        for n in range(s, e + 1):
+            i = 1
+            boring = True
+            for d in str(n):
+                if i % 2 != int(d) % 2:
+                    boring = False
+                i += 1
+                if i > len(str(n)) - l:
+                    break
+            if boring and l == 0:
+                lsum += 1
+
+        if boring and l != 0:
+            lsum += 5**l
+    
+    return rsum - lsum
+
+solution = solution_fastest
 
 tc = int(raw_input())
 for i in xrange(1, tc + 1):

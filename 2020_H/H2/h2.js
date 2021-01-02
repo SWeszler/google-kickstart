@@ -4,7 +4,7 @@ function solution_bf(L, R) {
     var counter = 0;
     for (L; L <= R; L++) {
         found = true;
-        [L.toString()].forEach(function (e, i) {
+        L.toString().split('').forEach(function (e, i) {
             if ((i + 1) % 2 !== +e % 2) {
                 found = false;
             }

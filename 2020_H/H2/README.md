@@ -19,9 +19,9 @@ Time limit: 20 seconds.
 Memory limit: 1 GB.
 1 ≤ T ≤ 100.
 Test Set 1
-1 ≤ L ≤ R ≤ 103.
+1 ≤ L ≤ R ≤ 10^3.
 Test Set 2
-1 ≤ L ≤ R ≤ 1018.
+1 ≤ L ≤ R ≤ 10^18.
 
 ## Sample
 
@@ -44,6 +44,23 @@ In Sample Case #1, the numbers in the range are {5, 6, 7, 8, 9, 10, 11, 12, 13, 
 In Sample Case #2, the numbers in the range are {120, 121, 122, 123, 124, 125} out of which {121, 123, 125} are boring, hence the answer is 3.
 
 In Sample Case #3, the numbers in the range are {779, 780, 781, 782, 783} out of which {781, 783} are boring, hence the answer is 2.
+
+## Solution
+
+Following the analysis from the author of this problem.
+
+> For example, let R = 3422. Number of boring numbers in [1, R] equals the number of boring numbers in [1,9] + [10, 99] + [100, 999] + [1000, 1999] + [2000, 2999] + [3000, 3099] + [3100, 3199] + [3200, 3299] + [3300, 3399] + [3400, 3409] + [3410, 3419] + [3420, 3422].
+
+There are three types of the intervals:
+1. intervals that start with 1(0) and end with (9)
+2. intervals that start with x(0) and end with x(9)
+3. last interval [x, y] where y - x < 10
+It's easier to do this with two while loops, first we increment the length of the numbers until we exhaust all intervals type 1. Then we look for intervals type 2 and decrease the length until we reach the last interval type 3.
+
+> Final answer = (number of boring numbers less than or equal to R) - (number of boring numbers less than or equal to L - 1).  
+Complexity = O(log10(R)).
+
+With as high input as 10^18 we had to find logarithmic solution. The best scenario is O(log10(R)). For example, if R = 1000, we can have only 3 intervals [1,9],[10,99],[100,999], log10(1000) = 3.
 
 ## Testing  
 

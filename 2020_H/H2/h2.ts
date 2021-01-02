@@ -6,7 +6,7 @@ function solution_bf(L:number, R:number) {
 
   for(L; L <= R; L++) {
     found = true;
-    [...[L.toString()]].forEach((e, i) => {
+    L.toString().split('').forEach((e, i) => {
       if ((i + 1) % 2 !== +e % 2) {
         found = false
       }
