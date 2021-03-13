@@ -86,10 +86,10 @@ solution = solution_trie
 
 tc = int(input())
 for i in range(1, tc + 1):
-    N, K = input().split()
+    N, K = raw_input().split()
     strings = []
     for j in range(int(N)):
-        strings.append(input())
+        strings.append(raw_input())
 
     out = solution(int(N), int(K), strings)
     print("Case #{}: {}".format(i, out))
