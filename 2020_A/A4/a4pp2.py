@@ -71,14 +71,15 @@ def solution_trie(N, K, strings):
     for s in strings:
         pre.insert(s)
 
-    def helper(node):
-        total = 0
+    queue = [pre.root]
+    total = 0
+    while queue:
+        node = queue.pop(0)
         for k, n in node.children.items():
             total += n.count // K
-            total += helper(n)
-        return total
+            queue.append(n)
 
-    return helper(pre.root)
+    return total
 
 
 solution = solution_trie
