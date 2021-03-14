@@ -42,30 +42,32 @@ def solution_bf(W, H, L, U, R, D):
 def solution_dp(W, H, L, U, R, D):
     dp = {}
 
-    def helper(i, j):
-        key = f"{i}{j}"
+    def helper(i, j, total):
+        key = "{}{}{}".format(i, j, total)
         if key in dp:
             return dp[key]
 
-        res = 0.0
+        res = 0
+
         if i == H and j == W:
-            return 1
+            return total
 
         if U <= i <= D and L <= j <= R:
-            return 0.0
+            return 0
         
         if i == H:
-            res += helper(i, j + 1)
+            res += helper(i, j + 1, total)
         elif j == W:
-            res += helper(i + 1, j)
+            res += helper(i + 1, j, total)
         else:
-            res += 0.5 * helper(i + 1, j) + 0.5 * helper(i, j + 1)
+            total *= 0.5
+            res += helper(i + 1, j, total)
+            res += helper(i, j + 1, total)
 
         dp[key] = res
         return res
 
-    res = helper(1, 1)
-    return res
+    return helper(1, 1, 1)
 
 
 
@@ -74,8 +76,6 @@ solution = solution_dp
 tc = input()
 
 for i in range(1, int(tc) + 1):
-    W, H, L, U, R, D = input().split()
-    # if i != 2:
-    #     continue
+    W, H, L, U, R, D = raw_input().split()
     out = solution(int(W), int(H), int(L), int(U), int(R), int(D))
-    print(f"Case #{i}: {out}")
+    print("Case #{}: {}".format(i, out))
