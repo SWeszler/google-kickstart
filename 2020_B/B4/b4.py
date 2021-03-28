@@ -1,3 +1,5 @@
+#https://www.youtube.com/watch?v=fpnNaAU0iPk&list=PLmdFyQYShrjfPLdHQxuNWvh2ct666Na3z&index=15
+
 def gen_paths(i, j, stack):
     if (i == H and j == W):
         print(stack + [[i, j]])
@@ -40,6 +42,7 @@ def solution_bf(W, H, L, U, R, D):
 
 
 def solution_dp(W, H, L, U, R, D):
+    """ TODO - fix some issues with floating point """
     dp = {}
 
     def helper(i, j):
@@ -69,38 +72,37 @@ def solution_dp(W, H, L, U, R, D):
 
 
 def solution_optimal(W, H, L, U, R, D):
-    from math import factorial
-    X = []
-    Y = []
+    from math import log, exp
     res = 0
 
-    def get_x(i, j):
-        if not 1 <= i <= H or not 1 <= j <= W:
-            return
-        X.append([i, j])
-        get_x(i + 1, j - 1)
+    def prob(log_fac, n, k):
+        return exp(log_fac[n] - log_fac[k] - log_fac[n - k] - n * log(2))
 
-    def get_y(i, j):
-        if not 1 <= i <= H or not 1 <= j <= W:
-            return
-        Y.append([i, j])
-        get_y(i - 1, j + 1)
+    log_fac = [0.0]
+    for x in range(1, W + H - 2):
+        log_fac.append(log_fac[-1] + log(x))
 
-    get_x(D + 1, L - 1)
-    get_y(U - 1, R + 1)
+    x = L - 1
+    y = D + 1
+    while y <= H and x > 0:
+        n = x + y - 2
+        k = x - 1
+        res += prob(log_fac, n, k) if y < H else prob(log_fac, n - 1, k) / 2.0
+        if y < H:
+            y += 1
+        x -= 1
 
-    for x in X:
-        x_prob = 0.5**(L + D - 2)
-        x_paths = factorial(x[0] + x[1] - 2) / (factorial(x[1] - 1) * factorial(x[0] - 1))
-        res += x_prob * x_paths
-
-    for y in Y:
-        y_prob = 0.5**(R + U - 2)
-        y_paths = factorial(y[0] + y[1] - 2) / (factorial(y[1] - 1) * factorial(y[0] - 1))
-        res += y_prob * y_paths
+    x = R + 1
+    y = U - 1
+    while x <= W and y > 0:
+        n = x + y - 2
+        k = y - 1
+        res += prob(log_fac, n, k) if x < W else prob(log_fac, n - 1, k) / 2.0
+        if x < W:
+            x += 1
+        y -= 1
 
     return res
-
 
 
 solution = solution_optimal
@@ -108,7 +110,5 @@ solution = solution_optimal
 tc = input()
 for i in range(1, int(tc) + 1):
     W, H, L, U, R, D = input().split()
-    # if i != 1:
-    #     continue
     out = solution(int(W), int(H), int(L), int(U), int(R), int(D))
     print(f"Case #{i}: {out}")
