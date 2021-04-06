@@ -65,7 +65,7 @@ def solution_optimal(R, C, m):
                     nodes.append([r, c + 1])
                 
                 if len(nodes) >= 2:
-                    graph[f"{r}{c}"] = nodes
+                    graph["{}{}".format(r, c)] = nodes
     
     print(graph)
 
@@ -75,10 +75,10 @@ solution = solution_bf
 
 tc = int(input())
 for i in range(1, tc + 1):
-    R, C = input().split()
+    R, C = raw_input().split()
     m = []
     for k in range(int(R)):
-        m.append([int(p) for p in input().split()])
+        m.append([int(p) for p in raw_input().split()])
     # if i != 2:
     #     continue
     out = solution(int(R), int(C), m)
