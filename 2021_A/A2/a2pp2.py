@@ -42,34 +42,6 @@ def solution_bf(R, C, m):
     return result
 
 
-def solution_optimal(R, C, m):
-    graph = {}
-    
-    for r in range(R):
-        m[r] = [0] + m[r] + [0]
-
-    empty = [0 for i in range(R + 1)]
-    m = [empty] + m + [empty]
-
-    for r in range(1, R + 1):
-        for c in range(1, C + 1):
-            if m[r][c]:
-                nodes = []
-                if m[r - 1][c] and (m[r][c + 1] or m[r][c - 1]):
-                    nodes.append([r - 1, c])
-                if m[r + 1][c] and (m[r][c + 1] or m[r][c - 1]):
-                    nodes.append([r + 1, c])
-                if m[r][c - 1] and (m[r - 1][c] or m[r + 1][c]):
-                    nodes.append([r, c - 1])
-                if m[r][c + 1] and (m[r - 1][c] or m[r + 1][c]):
-                    nodes.append([r, c + 1])
-                
-                if len(nodes) >= 2:
-                    graph["{}{}".format(r, c)] = nodes
-    
-    print(graph)
-
-
 solution = solution_bf
 
 
@@ -79,7 +51,5 @@ for i in range(1, tc + 1):
     m = []
     for k in range(int(R)):
         m.append([int(p) for p in raw_input().split()])
-    # if i != 2:
-    #     continue
     out = solution(int(R), int(C), m)
     print("Case #{}: {}".format(i, out))
