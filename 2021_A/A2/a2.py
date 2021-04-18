@@ -42,7 +42,7 @@ def solution_bf(R, C, m):
     return result
 
 
-def solution_optimal(R, C, m):
+def solution_test(R, C, m):
     graph = {}
     
     for r in range(R):
@@ -69,8 +69,48 @@ def solution_optimal(R, C, m):
     
     print(graph)
 
+def solution_optimal(R, C, m):
+    top = [[c for c in r] for r in m]
+    right = [[c for c in r] for r in m]
+    bottom = [[c for c in r] for r in m]
+    left = [[c for c in r] for r in m]
+    res = 0
 
-solution = solution_bf
+    for i in range(R):
+        for j in range(C):
+            if m[i][j] == 0:
+                continue
+            if i > 0:
+                top[i][j] += top[i - 1][j]
+            if j > 0:
+                left[i][j] += left[i][j - 1]
+
+    for i in range(R - 1, -1, -1):
+        for j in range(C - 1, -1, -1):
+            if m[i][j] == 0:
+                continue
+            if i < R - 1:
+                bottom[i][j] += bottom[i + 1][j]
+            if j < C - 1:
+                right[i][j] += right[i][j + 1]
+
+    def count(x, y):
+        res = min(x // 2, y) + min(y // 2, x) - 2
+        return res if res > 0 else 0
+
+    for i in range(R):
+        for j in range(C):
+            if m[i][j] == 0:
+                continue
+            res += count(top[i][j], left[i][j])
+            res += count(top[i][j], right[i][j])
+            res += count(bottom[i][j], left[i][j])
+            res += count(bottom[i][j], right[i][j])
+
+    return res
+
+
+solution = solution_optimal
 
 
 tc = int(input())
@@ -79,7 +119,5 @@ for i in range(1, tc + 1):
     m = []
     for k in range(int(R)):
         m.append([int(p) for p in input().split()])
-    # if i != 2:
-    #     continue
     out = solution(int(R), int(C), m)
     print("Case #{}: {}".format(i, out))
