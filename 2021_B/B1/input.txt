@@ -1,0 +1,7 @@
+3
+4
+ABBC
+6
+ABACDA
+8
+ABCDEAAA
