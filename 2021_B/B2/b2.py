@@ -1,48 +1,3 @@
-def solution(N, A):
-    res = 0
-    dp = [1, 2] + [0 for i in range(N - 2)]
-    repl = -1
-    diff = abs(A[1] - A[0])
-    count = 2
-
-    for i in range(2, N):
-        if abs(A[i] - A[i - 1]) == diff:
-            count += 1
-        elif repl < 0:
-            count += 1
-            repl = i
-            A[i] = A[i - 1] + abs(A[i - 1] - A[i - 2])
-        else:
-            dp[i] = max(i - repl, dp[i - 1])
-            diff = abs(A[i] - A[i - 1])
-            count = 1
-
-        dp[i] = max(dp[i - 1], count)
-
-    res = dp[-1]
-
-    dp = [0 for i in range(N - 2)] + [2, 1]
-    repl = -1
-    diff = abs(A[-1] - A[-2])
-    count = 2
-        
-    for i in range(N - 2, -1, -1):
-        if abs(A[i] - A[i + 1]) == diff:
-            count += 1
-        elif repl < 0:
-            count += 1
-            repl = i
-            A[i] = A[i + 1] + abs(A[i + 1] - A[i + 2])
-        else:
-            dp[i] = max(repl - i, dp[i + 1])
-            diff = abs(A[i] - A[i + 1])
-            count = 1
-
-        dp[i] = max(dp[i + 1], count)
-
-    return max(dp[-1], res)
-
-
 def solution_bf(N, A):
     if N <= 2:
         return 2
@@ -87,12 +42,74 @@ def solution_bf(N, A):
     return res
 
 
-solution = solution_bf
+def solution_optimal(N, A):
+    import collections
+    D = []
+    res = 0
+    chunks = collections.defaultdict(list)
+
+    for i in range(1, N):
+        D.append(A[i] - A[i -1])
+
+    d = D[0]
+    k = 0
+    len_D = len(D)
+    for i in range(len_D):
+        if D[i] == d:
+            chunks[k].append(D[i])
+        else:
+            d = D[i]
+            k = i
+            chunks[k].append(D[i])
+
+
+    for i, chunk in chunks.items():
+        k = len(chunk)
+        l = k + 1
+        if i + k + 1 == len_D:
+            l += 1
+        elif i + k + 1 < len_D and D[i + k] + D[i + k + 1] == 2 * chunk[0]:
+            l += 2
+        if i + k + 2 < len_D - 1 and D[i + k] + D[i + k + 1] == 2 * chunk[0] and D[i + k + 2] == chunk[0]:
+            l += len(chunks[i + k + 2])
+        res = max(res, l)
+
+    chunks = collections.defaultdict(list)
+    d = D[-1]
+    k = len_D - 1
+    len_D = len(D)
+    for i in range(len_D - 1, -1, -1):
+        if D[i] == d:
+            chunks[k].append(D[i])
+        else:
+            d = D[i]
+            k = i
+            chunks[k].append(D[i])
+
+    for i, chunk in chunks.items():
+        k = len(chunk)
+        l = k + 1
+        if i - k - 1 == 0:
+            l += 1
+        elif i - k - 1 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0]:
+            l += 2
+        if i - k - 2 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0] and D[i - k - 2] == chunk[0]:
+            l += len(chunks[i - k - 2])
+        # print('i:', i, chunk, l)
+
+        res = max(res, l)
+
+    return res
+
+
+solution = solution_optimal
 
 
 tc = int(input())
 for i in range(1, tc + 1):
     N = input()
     A = [int(a) for a in input().split()]
+    # if i != 5:
+    #     continue
     out = solution(int(N), A)
     print("Case #{}: {}".format(i, out))
