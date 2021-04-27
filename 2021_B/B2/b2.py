@@ -66,10 +66,10 @@ def solution_optimal(N, A):
     for i, chunk in chunks.items():
         k = len(chunk)
         l = k + 1
-        if i + k + 1 == len_D:
-            l += 1
-        elif i + k + 1 < len_D and D[i + k] + D[i + k + 1] == 2 * chunk[0]:
+        if i + k + 1 < len_D and D[i + k] + D[i + k + 1] == 2 * chunk[0]:
             l += 2
+        elif i + k < len_D:
+            l += 1
         if i + k + 2 < len_D - 1 and D[i + k] + D[i + k + 1] == 2 * chunk[0] and D[i + k + 2] == chunk[0]:
             l += len(chunks[i + k + 2])
         res = max(res, l)
@@ -89,13 +89,12 @@ def solution_optimal(N, A):
     for i, chunk in chunks.items():
         k = len(chunk)
         l = k + 1
-        if i - k - 1 == 0:
-            l += 1
-        elif i - k - 1 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0]:
+        if i - k - 1 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0]:
             l += 2
+        elif i - k >= 0:
+            l += 1
         if i - k - 2 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0] and D[i - k - 2] == chunk[0]:
             l += len(chunks[i - k - 2])
-        # print('i:', i, chunk, l)
 
         res = max(res, l)
 
@@ -109,7 +108,5 @@ tc = int(input())
 for i in range(1, tc + 1):
     N = input()
     A = [int(a) for a in input().split()]
-    # if i != 5:
-    #     continue
     out = solution(int(N), A)
     print("Case #{}: {}".format(i, out))

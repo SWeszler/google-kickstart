@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "alwaysStrict": true,
+    },
+    "files": [
+        "b2.ts",
+    ]
+}

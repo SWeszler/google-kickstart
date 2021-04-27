@@ -42,7 +42,66 @@ def solution_bf(N, A):
     return res
 
 
-solution = solution_bf
+def solution_optimal(N, A):
+    import collections
+    D = []
+    res = 0
+    chunks = collections.defaultdict(list)
+
+    for i in range(1, N):
+        D.append(A[i] - A[i -1])
+
+    d = D[0]
+    k = 0
+    len_D = len(D)
+    for i in range(len_D):
+        if D[i] == d:
+            chunks[k].append(D[i])
+        else:
+            d = D[i]
+            k = i
+            chunks[k].append(D[i])
+
+
+    for i, chunk in chunks.items():
+        k = len(chunk)
+        l = k + 1
+        if i + k + 1 < len_D and D[i + k] + D[i + k + 1] == 2 * chunk[0]:
+            l += 2
+        elif i + k < len_D:
+            l += 1
+        if i + k + 2 < len_D - 1 and D[i + k] + D[i + k + 1] == 2 * chunk[0] and D[i + k + 2] == chunk[0]:
+            l += len(chunks[i + k + 2])
+        res = max(res, l)
+
+    chunks = collections.defaultdict(list)
+    d = D[-1]
+    k = len_D - 1
+    len_D = len(D)
+    for i in range(len_D - 1, -1, -1):
+        if D[i] == d:
+            chunks[k].append(D[i])
+        else:
+            d = D[i]
+            k = i
+            chunks[k].append(D[i])
+
+    for i, chunk in chunks.items():
+        k = len(chunk)
+        l = k + 1
+        if i - k - 1 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0]:
+            l += 2
+        elif i - k >= 0:
+            l += 1
+        if i - k - 2 >= 0 and D[i - k] + D[i - k - 1] == 2 * chunk[0] and D[i - k - 2] == chunk[0]:
+            l += len(chunks[i - k - 2])
+
+        res = max(res, l)
+
+    return res
+
+
+solution = solution_optimal
 
 
 tc = int(input())
