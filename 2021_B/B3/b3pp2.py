@@ -26,35 +26,11 @@ def solution_bf(Z):
     return last_first * last_second
 
 
-def solution_bf2(Z):
-    N = int(Z**0.5) + 10
-    A = [False, False] + [True for i in range(2, N + 1)]
-    
-    for i in range(2, int(N**0.5) + 1):
-        if A[i]:
-            k = 0
-            j = i**2
-            while j <= N:
-                A[j] = False
-                k += 1
-                j = i**2 + k * i
-    
-    P = [i for i, a in enumerate(A) if a]
-    
-    for i in range(1, len(P)):
-        if P[i] * P[i - 1] > Z:
-            return P[i - 1] * P[i - 2]
-
-    return P[i] * P[i - 1]
-
-
-solution = solution_bf2
+solution = solution_bf
 
 
 tc = int(input())
 for i in range(1, tc + 1):
     Z = input()
-    # if i != 3:
-    #     continue
     out = solution(int(Z))
     print("Case #{}: {}".format(i, out))
