@@ -51,7 +51,6 @@ def solution_optimal(N, K, s):
     for i in range(H):
         res += alphabet[s[i]] * pow(K, H - i - 1, max_res)
 
-
     def is_smaller(s1, s2):
         p1 = 0
         p2 = 0
@@ -73,7 +72,7 @@ solution = solution_optimal
 
 tc = int(input())
 for i in range(1, tc + 1):
-    N, K = input().split()
-    s = input()
+    N, K = raw_input().split()
+    s = raw_input()
     out = solution(int(N), int(K), s)
     print("Case #{}: {}".format(i, out))
