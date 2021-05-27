@@ -29,21 +29,21 @@ def solution_bf(N, K, s):
 
 
 def solution_optimal(N, K, s):
-    alphabet = {c: ord(c) - 97 for c in 'abcdefghijklmnopqrstuvwxyz'}
+    alphabet = {c: ord(c) - ord('a') for c in 'abcdefghijklmnopqrstuvwxyz'}
     H = -(-N // 2)
     max_res = 10**9 + 7
     res = 0
 
-    def pow(A, B, p):
+    def pow(base, exp, mod):
         res = 1
-        A = A % p
-        if A == 0:
+        base %= mod
+        if base == 0:
             return 0
-        while B > 0:
-            if B & 1 == 1:
-                res = (res * A) % p
-            B = B >> 1
-            A = (A * A) % p
+        while exp > 0:
+            if exp & 1 == 1:
+                res = (res * base) % mod
+            exp >>= 1
+            base = (base * base) % mod
 
         return res
 
