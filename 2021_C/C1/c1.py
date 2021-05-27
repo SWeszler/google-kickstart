@@ -7,7 +7,7 @@ def solution_bf(N, K, s):
     for n in range(N):
         new_str = []
         for x in strings:
-            for y in alphabet[:K]:              
+            for y in alphabet[:K]:
                 new_str.append(x + y)
         strings = new_str
 
@@ -26,10 +26,10 @@ def solution_bf(N, K, s):
             res += 1
 
     return res % (10**9 + 7)
-    
+
 
 def solution_optimal(N, K, s):
-    alphabet = {c: ord(c) - 97 for c in 'abcdefghijklmnopqrstuvwxyz' }
+    alphabet = {c: ord(c) - 97 for c in 'abcdefghijklmnopqrstuvwxyz'}
     H = -(-N // 2)
     max_res = 10**9 + 7
     res = 0
@@ -42,15 +42,13 @@ def solution_optimal(N, K, s):
         while B > 0:
             if B & 1 == 1:
                 res = (res * A) % p
-
             B = B >> 1
             A = (A * A) % p
-        return res
 
+        return res
 
     for i in range(H):
         res += alphabet[s[i]] * pow(K, H - i - 1, max_res)
-
 
     def is_smaller(s1, s2):
         p1 = 0
